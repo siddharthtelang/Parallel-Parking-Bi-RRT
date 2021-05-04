@@ -8,15 +8,19 @@ class Obstacle:
         self.robot_radius = 0.354 / 2
         self.clearance = self.robot_radius + self.clearance
 
-        self.rect1_corner1_x = 2.75
-        self.rect1_corner1_y = 0
-        self.rect1_length = 0.5
-        self.rect1_width = 3
+        #self.rect1_corner1_x = 3
+        #self.rect1_corner1_y = 0
+        self.rect1_corner1_x = 0
+        self.rect1_corner1_y = 2.75
+        self.rect1_length = 3
+        self.rect1_width = 0.01
 
-        self.rect2_corner1_x = 5.75
-        self.rect2_corner1_y = 0
-        self.rect2_length = 0.5
-        self.rect2_width = 3
+        #self.rect2_corner1_x = 6
+        #self.rect2_corner1_y = 0
+        self.rect2_corner1_x = 0
+        self.rect2_corner1_y = 6.25
+        self.rect2_length = 3
+        self.rect2_width = 0.01
     def isInObstacleSpace(self, x, y):
 
         if (x < 0 or x >= 10 or y < 0 or y >= 10):
