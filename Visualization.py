@@ -28,8 +28,17 @@ class Visualization:
         rect1 = patches.Rectangle(rect1_corner1, rect1_length, rect1_width, linewidth=1, edgecolor='r', facecolor='none')
         rect2 = patches.Rectangle(rect2_corner1, rect2_length, rect2_width, linewidth=1, edgecolor='r', facecolor='none')
 
+        rect3 = None
+        if self.obstacle.dynamic_Obstacle == True:
+            rect3_corner1 = (self.obstacle.dynamic_obs_corner_x - self.obstacle.clearance, self.obstacle.dynamic_obs_corner_y - self.obstacle.clearance)
+            rect3_length = self.obstacle.dynamic_obs_length + (2 * self.obstacle.clearance)
+            rect3_width = self.obstacle.dynamic_obs_width + (2 * self.obstacle.clearance)
+            rect3 = patches.Rectangle(rect3_corner1, rect3_length, rect3_width, linewidth=1, edgecolor='b', facecolor='none')
+
         ax.add_patch(rect1)
         ax.add_patch(rect2)
+        if (rect3 is not None):
+            ax.add_patch(rect3)
 
         return ax
 
