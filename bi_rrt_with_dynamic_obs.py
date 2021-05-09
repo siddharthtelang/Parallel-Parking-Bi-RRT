@@ -121,7 +121,7 @@ def isOnSpot(current, final):
     return (abs(error) < 0.5 and d < 0.5)
 
 
-# %%
+
 def move(state, action, T, obs):
     t = 0
     dt = 0.1
@@ -179,7 +179,7 @@ def getNearestNodeIndex(node_list, random_point):
     # print(random_point)
     for node in node_list:
         node_pts = node.getState()
-        alpha = 0.2
+        alpha = 0.3
         d = (((node_pts[0] - random_point[0])**2 + (node_pts[1] - random_point[1])**2) + alpha *(np.abs(node_pts[2] - random_point[2]))) ** 0.5
         distance.append(d)
     min_idx = distance.index(min(distance))
@@ -293,13 +293,12 @@ def checkTreeIntersection(nodes_list, obs):
     return node_list_filtered
 
 
-# %%
 height, width = 10, 10
 T = 1
 dt = 0.1
 threshold = 0.5
 rand_map = [width-1, height-1]
-start_point = [8,2,90,0]
+start_point = [8,2,0,0]
 goal_state = [2,4,90,0]
 obs = Obstacle(0.1)
 # viz = Visualization(obs)
@@ -318,8 +317,10 @@ destination = None
 connected_node_list = []
 connecting_dist = 100
 
-obs_iter = 50
+obs_iter = 50000000
 dynamic_obs_added = False
+p1 = []
+p2 = []
 
 
 ###########################for vizulization#####################
@@ -360,6 +361,8 @@ for i in range(1000):
     random_node = getRandomNode()
     nearest_idx = getNearestNodeIndex(node_list_s, random_node.getState())
     nearest_node = node_list_s[nearest_idx]
+
+
     new_node_s = getNewNode(nearest_node, random_node.getState(), obs)
     if (new_node_s == None):
         continue
@@ -401,57 +404,64 @@ ax = viz.addObstacles2Map(ax)
 ax.set_aspect("equal")
 c = 0
 
-for i in range(300):
-    if i == obs_iter:
-        # add obs
-        obs.addNewObstacle(4, 2, 0.5, 0.5)
-        dynamic_obs_added =  True
-        print("ADDING DYNAMIC OBSTACLE")
-        plt.close()
+old_node_list_s = node_list_s
+old_node_list_g = node_list_g
 
-        fig, ax = plt.subplots(figsize = (10, 10))
-        ax.set(xlim=(0, 10), ylim = (0,10))
-        ax = viz.addObstacles2Map(ax)
-        ax.set_aspect("equal")
+# for i in range(300):
+#     if i == obs_iter:
+#         # add obs
+#         obs.addNewObstacle(4, 2, 0.5, 0.5)
+#         dynamic_obs_added =  True
+#         print("ADDING DYNAMIC OBSTACLE")
+#         plt.close()
 
-        node_list_s_till_checkpt = node_list_s[0:dynamic_obs_ckeckpoint_s]
-        nodes = visualize(ax, node_list_s_till_checkpt, goal_node, goal_node, obs, "blue", True)
+#         fig, ax = plt.subplots(figsize = (10, 10))
+#         ax.set(xlim=(0, 10), ylim = (0,10))
+#         ax = viz.addObstacles2Map(ax)
+#         ax.set_aspect("equal")
 
-        node_list_g_till_checkpt = node_list_g[0:dynamic_obs_ckeckpoint_g]
-        nodes = visualize(ax, node_list_g_till_checkpt, goal_node, goal_node, obs, "red", True)
-        old_node_list_s = node_list_s[dynamic_obs_ckeckpoint_s:-1]
-        old_node_list_g = node_list_g[dynamic_obs_ckeckpoint_g:-1]
+#         node_list_s_till_checkpt = node_list_s[0:dynamic_obs_ckeckpoint_s]
+#         nodes = visualize(ax, node_list_s_till_checkpt, goal_node, goal_node, obs, "blue", True)
+
+#         node_list_g_till_checkpt = node_list_g[0:dynamic_obs_ckeckpoint_g]
+#         nodes = visualize(ax, node_list_g_till_checkpt, goal_node, goal_node, obs, "red", True)
+#         old_node_list_s = node_list_s[dynamic_obs_ckeckpoint_s:-1]
+#         old_node_list_g = node_list_g[dynamic_obs_ckeckpoint_g:-1]
 
     
 
-    if len(old_node_list_s) > 0:
-        node_p1 = old_node_list_s.pop(0)
-        start_node  = node_p1.getParent()
-        if start_node is not None:
-            xi, yi, _, _ = start_node.getState()
-            points = node_p1.getPathArray()
-            if points is not None:
-                for point in points:
-                    xn, yn = point
-                    ax.plot([xi, xn], [yi, yn], color="blue", linewidth = 1)
-                    xi, yi = xn, yn
+#     if len(old_node_list_s) > 0:
+#         node_p1 = old_node_list_s.pop(0)
+#         start_node  = node_p1.getParent()
+#         if start_node is not None:
+#             xi, yi, _, _ = start_node.getState()
+#             points = node_p1.getPathArray()
+#             if points is not None:
+#                 for point in points:
+#                     xn, yn = point
+#                     ax.plot([xi, xn], [yi, yn], color="blue", linewidth = 1)
+#                     xi, yi = xn, yn
 
-    if len(old_node_list_g) > 0:
-        node_p1 = old_node_list_g.pop(0)
-        start_node  = node_p1.getParent()
-        if start_node is not None:
-            xi, yi, _, _ = start_node.getState()
-            points = node_p1.getPathArray()
-            if points is not None:
-                for point in points:
-                    xn, yn = point
-                    ax.plot([xi, xn], [yi, yn], color="red", linewidth = 1)
-                    xi, yi = xn, yn
+#     if len(old_node_list_g) > 0:
+#         node_p1 = old_node_list_g.pop(0)
+#         start_node  = node_p1.getParent()
+#         if start_node is not None:
+#             xi, yi, _, _ = start_node.getState()
+#             points = node_p1.getPathArray()
+#             if points is not None:
+#                 for point in points:
+#                     xn, yn = point
+#                     ax.plot([xi, xn], [yi, yn], color="red", linewidth = 1)
+#                     xi, yi = xn, yn
 
-    plt.pause(0.0001)
+#     plt.pause(0.0001)
 
-print("Printing path")
+print("Printing path ", len(p1), len(p2))
+if (len(p1) == 0) and (len(p2) == 0):
+    print("Path not found. Run again!!")
+
 for node in p1:
+
     start_node  = node.getParent()
     if start_node is not None:
         xi, yi, _, _ = start_node.getState()
