@@ -1,7 +1,7 @@
 # Path-Planning-using-RRT
 ## How to run the code
 1) Change the directory to the location where the bi_rrt_with_dynamic_obs.py is present       
-2) Run the following command:
+2) Run the following command:      
             python3 bi_rrt_with_dynamic_obs.py
 
 
